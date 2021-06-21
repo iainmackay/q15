@@ -16,6 +16,8 @@
 		<script>
 (function() {
 	"use strict";
+	
+	const API_URL = "https://api.github.com/users/unipartdigital";
 
 	// Poor man's jQuery
 	const $ = function(selector) {
@@ -30,7 +32,7 @@
 	}
 
 	let $target = $("#target");
-	fetch ("https://api.github.com/users/unipartdigitam").then ((response) => {
+	fetch (API_URL).then ((response) => {
 		console.log ("Response", response);
 		if (response.ok) {
 			response.json ()
