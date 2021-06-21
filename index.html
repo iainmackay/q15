@@ -1,0 +1,61 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<title>API viewer</title>
+		<style>
+.error {
+	color: red;
+}
+		</style>
+	</head>
+	<body>
+		<div id="target">
+		</div>
+		
+		<script>
+(function() {
+	"use strict";
+
+	// Poor man's jQuery
+	const $ = function(selector) {
+		if (selector.startsWith ("#")) { // If explicit element
+			return document.querySelector(selector); // ... return it
+		}
+		return document.querySelectorAll(selector); // Otherwise, returns a list
+	};
+	
+	let makeErrorHTML = function (text) {
+		$target.innerHTML = `<div class="error">${text}</div>`;
+	}
+
+	let $target = $("#target");
+	fetch ("https://api.github.com/users/unipartdigitam").then ((response) => {
+		console.log ("Response", response);
+		if (response.ok) {
+			response.json ()
+				.then ((data) => {
+					if (data) {
+						$target.innerText = JSON.stringify (data, null, 4);
+					} else {
+						makeErrorHTML ("No data found");
+					}
+				})
+				.catch ((error) => {
+					makeErrorHTML (`Error in JSON: ${error}`);
+				})
+			;
+		} else {
+			if (response.status === 404) {
+				makeErrorHTML ("No data found");
+			} else {
+				makeErrorHTML (`Error: ${response.status} ${response.statusText}`);
+			}
+		}
+	}).catch ((error) => {
+		makeErrorHTML (error);
+	});
+}());
+		</script>
+	</body>
+</html>
